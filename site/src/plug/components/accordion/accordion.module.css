@@ -1,0 +1,32 @@
+.root {
+    border: 1px solid var(--border-color);
+}
+
+.root .item .header {
+    padding: 3px 5px;
+    border-bottom: 1px solid var(--border-color);
+
+    cursor: pointer;
+}
+
+.root .item:last-child .header {
+    border-bottom: none;
+}
+
+.root .item .content_wrapper {
+    display: none;
+}
+
+.root .item.expanded .content_wrapper {
+    padding: 10px;
+    display: block;
+
+    background-color: var(--border-color);
+}
+
+.root .item.expanded .content_wrapper .details {
+    padding: 10px;
+
+    border-radius: 3px;
+    background-color: #fff;
+}

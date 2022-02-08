@@ -1,0 +1,3 @@
+.details .summary table td {
+	border: 1px solid var(--border-color);
+}
