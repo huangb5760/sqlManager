@@ -89,14 +89,20 @@ const createDatabaseDQL = ({ title, properties = {} }) => {
     return `select ${columns.join('\n   , ')} \nfrom ${title} \n-- limit 10`;
 };
 
-const createImpalaDDL = ({ title, properties = {} }) => {
+const createImpalaDDL = ({ title, description, properties = {} }) => {
     const tableName = `${title}_of_impala`;
-    const suffix = `partitioned by (dt string comment "日期分区字段") \nrow format delimited fields terminated by "\\t" \nstored as orc`;
     const columns = Object.entries(properties).map(([column, options]) => {
-        return `\t${column} ${DATA_TYPES[options.type] ? DATA_TYPES[options.type]['impala'] : '/** ' + options.type + ' **/'} comment "${options.description}"`;
+        return `\t${column} ${DATA_TYPES[options.type] ? DATA_TYPES[options.type]['impala'] : '/** ' + options.type + ' **/'} comment '${options.description}'`;
     });
-    const refreshTable = `invalidate metadata ${tableName}`;
-    return `create table if not exists ${tableName} (\n${columns.join(',\n')}\n) \n${suffix};\n\n${refreshTable};`;
+    return [
+        `create table if not exists ${tableName} (`,
+            columns.join(',\n'),
+        ')',
+        `partitioned by (dt string comment "日期分区字段")`,
+        `comment '${description}'`,
+        `row format delimited fields terminated by '\\t'`,
+        `stored as orc`
+    ].join('\n');
 };
 
 export default function DataDefinitionSchema() {
@@ -128,7 +134,7 @@ export default function DataDefinitionSchema() {
             </SplitView>
             <Modal className={styles.details} open={show} title="展示 Schema" onClose={() => setShow(false)}>
                 {schema ? (
-                    <Accordion show={3}>
+                    <Accordion>
                         <div className={styles.summary} title={`Table Summary`}>
                             <table>
                                 <tr>
@@ -155,9 +161,6 @@ export default function DataDefinitionSchema() {
                         </div>
                         <div title="DataX / (RDBMS ➔ HDFS)">
                             <CodeBlock language="json" value={JSON.stringify(convertHiveWriter(schema), null, 3)} />
-                        </div>
-                        <div title="Scoop / (RDBMS ➔ Impala)">
-                            <CodeBlock language="shell" value={'// TODO'} />
                         </div>
                         <div title="Impala Table DDL">
                             <CodeBlock language="sql" value={createImpalaDDL(schema)} />
