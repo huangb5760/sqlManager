@@ -20,6 +20,7 @@
     "mingo": "^5.0.0",
     "monaco-editor": "latest",
     "parse-json": "^5.2.0",
+    "performant-array-to-tree": "^1.9.1",
     "react": "^17.0.2",
     "react-base-table": "^1.13.0",
     "react-dom": "^17.0.2",
@@ -42,8 +43,8 @@
   "scripts": {
     "toml": "files2json -v --matter=toml src/data/toml/ -o src/data/cache/app.json",
     "snippets": "files2json -v --matter=toml ../snippets/ -o src/data/cache/snippets.json",
-    "prestart": "npm run toml && npm run snippets",
-    "prebuild": "npm run toml && npm run snippets",
+    "prestart": "npm run toml",
+    "prebuild": "npm run toml",
     "start": "react-app-rewired start",
     "build": "react-app-rewired build"
   },

@@ -10,11 +10,12 @@ import Snippets from './snippets/snippet-kits.module';
 import TimeKits from './text/time/time-kits.module';
 import TOMLEditor from './text/toml/toml-kits.module';
 import TextCrypto from './text/crypto/crypto-kits.module';
+import Translator from './text/translator/translator.module';
 import TextDifference from './text/difference/text-difference.module';
 
 // expr
-import CronExpressionKit from './expression/cron/cron-expression-v1.module';
-import ScoopCommandKit from './expression/cli/scoop/scoop-cli.module';
+import CronExpressionKit from './text/cron/cron-expression-v1.module';
+import ScoopCommandKit from './text/cli/scoop/scoop-cli.module';
 
 const KitList = () => {
     return (
@@ -71,6 +72,9 @@ export default {
         }, {
             path: 'datetime',
             element: <TimeKits />
+        }, {
+            path: 'translator',
+            element: <Translator />
         }]
     }, {
         path: 'expression',

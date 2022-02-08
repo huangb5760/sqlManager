@@ -1,5 +1,7 @@
-export { default as Select } from './form-item/select/select.module';
+export { default as Select } from './form-item/select/form-select.module';
+export { default as FormInput } from './form-item/input/form-input.module';
 
+export { default as Tree } from './tree/tree.module';
 
 export { default as Accordion } from './accordion/accordion.module';
 export { default as Modal } from './modal/modal.module';
