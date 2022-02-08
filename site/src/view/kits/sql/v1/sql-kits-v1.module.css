@@ -9,3 +9,7 @@
     padding: 5px 0 5px 5px;
     overflow-y: auto;
 }
+
+.details .summary table td {
+	border: 1px solid var(--border-color);
+}

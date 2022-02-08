@@ -6,7 +6,7 @@ import { useDocumentTitle } from 'plug/hooks';
 import { Parser } from 'sql-ddl-to-json-schema';
 import { format as formatSQL } from '@sqltools/formatter';
 
-import { Splitter as SplitView } from "plug/components";
+import { Accordion, CodeBlock, Splitter as SplitView } from "plug/components";
 
 import DriftToolbar from 'plug/extra/drift-toolbar/drift-toolbar.module';
 
@@ -17,8 +17,6 @@ import { Button, Label, Select as SelectV1 } from 'plug/extra/form-item/v1/form-
 import { Modal, Select } from 'plug/components';
 
 import IssueSchema from "plug/github/issue/issue-schema/issue-schema.module";
-
-import JavaBeanViewer from '../ddl-schema/java-bean/ddl-schema2java-bean.module';
 
 import styles from './sql-kits-v1.module.css';
 
@@ -54,7 +52,7 @@ export const SQLFormatter = () => {
     );
 };
 
-const DEMO_DDL=`
+const DEMO_DDL = `
 CREATE TABLE demo_table (
     id int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
     status tinyint(1) DEFAULT '1' COMMENT '有效标志',
@@ -65,22 +63,97 @@ CREATE TABLE demo_table (
 ) COMMENT='DEMO Table';
 `;
 
+const SCHEMA_RENDERS = [
+    ['datax/schema', 'DataX Config'],
+    ['json/object', 'JSON Object'],
+];
 
-const DEFAULT_RENDER = 'java/bean';
+const DEFAULT_RENDER = SCHEMA_RENDERS[0][0];
 
-const SCHEMA_RENDERS = Object.entries({
-    'java/bean': 'Java Bean',
-    'json/object': 'JSON Object',
-});
+const wrapDatabase2HDFS = (schema = {}) => {
+    return {
+        content: [
+            {
+                reader: source,
+                writer: {
+                    "name": "hdfswriter",
+                    "parameter": {
+                        "defaultFS": "hdfs://xxx:port",
+                        "fileType": "orc",
+                        "path": "/user/hive/warehouse/writerorc.db/orcfull",
+                        "fileName": "xxxx",
+                        "column": []
+                    }
+                }
+            }
+        ]
+    }
+};
+
+const HDFS_DATA_TYPES = {
+    'string': 'string',
+    'integer': 'bigint',
+};
+
+const convertHiveWriter = (schema = {}) => {
+    return {
+        content: [
+            {
+                reader: {
+                    "name": "mysqlreader",
+                    "parameter": {
+                        "connection": [
+                            {
+                                "table": [
+                                    "${sync_table}"
+                                ],
+                                "jdbcUrl": [
+                                    "${jdbc_url}?"
+                                ]
+                            }
+                        ],
+                        "username": "${jdbc_username}",
+                        "password": "${jdbc_password}",
+                        "splitPk": "${split_key}",
+                        "column": Object.entries(schema.properties || {}).map(([column]) => column)
+                    }
+                },
+                writer: {
+                    "name": "hdfswriter",
+                    "parameter": {
+                        "defaultFS": "${hdfs_service}",
+                        "fileType": "orc",
+                        "path": "${hdfs_location}/${sync_table}",
+                        "fileName": "${sync_table}",
+                        "column": Object.entries(schema.properties || {}).map(([column, options], index) => ({
+                            index,
+                            name: column,
+                            type: HDFS_DATA_TYPES[options.type] || null,
+                            desc: `${options.description || column} - ${options.type}${options.format ? ('/' + options.format) : ''}`
+                        }))
+                    }
+                }
+            }
+        ]
+    };
+}
+
+const createDQL = ({ title, properties = {} }) => {
+    const columns = Object.entries(properties).map(([column, options]) => {
+        return `${column} -- ${options.description}`;
+    });
+    return `select ${columns.join('\n   , ')} \nfrom ${title} \n-- limit 10`;
+};
 
 const DDLSchema = () => {
     useDocumentTitle('DDL Schema');
     const [ddls, setDDLs] = useState(DEMO_DDL);
-    const [mode, setMode] = useState(DEFAULT_RENDER);
+    const [mode, setMode] = useState(0);
     const [show, setShow] = useState(false);
-    const [ schema ] = useMemo(() => {
+    const schemas = useMemo(() => {
         return MYSQL_DDL_PARSER.feed(ddls).toJsonSchemaArray(DDL_PARSER_OPTIONS);
     }, [ddls]);
+    const schema = schemas[mode];
     return (
         <Fragment>
             <SplitView sizes={[60, 40]} gutterSize={5}>
@@ -90,17 +163,61 @@ const DDLSchema = () => {
                 <div className={classNames(styles.board)}>
                     <JSONViewer name="DDL" value={schema} />
                     <DriftToolbar postion="rb">
-                        <Button onClick={() => setShow(true)}>Show</Button>
-                        <Select defaultValue={mode} onChange={value => {setMode(value);}}>
-                            {SCHEMA_RENDERS.map(([value, label], index) => (
-                                <option key={index} value={value}>{label}</option>
+                        <Button onClick={() => setShow(true)}>Show schema of</Button>
+                        <Select defaultValue={mode} onChange={value => { setMode(value); }}>
+                            {schemas.map((schema, index) => (
+                                <option key={index} value={index}>{schema.title}</option>
                             ))}
                         </Select>
                     </DriftToolbar>
                 </div>
             </SplitView>
-            <Modal open={show} title="展示 Schema" onClose={() => setShow(false)}>
-                <JavaBeanViewer schema={ schema } />
+            <Modal className={styles.details} open={show} title="展示 Schema" onClose={() => setShow(false)}>
+                {schema ? (
+                    <Accordion>
+                        <div className={styles.summary} title={`Table Summary`}>
+                            <table>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>{schema.title}</td>
+                                </tr>
+                                <tr>
+                                    <td>Comment</td>
+                                    <td>{schema.description}</td>
+                                </tr>
+                                <tr>
+                                    <td>Columns</td>
+                                    <td>{Object.entries(schema.properties || {}).map(([column]) => column).join(', ')}</td>
+                                </tr>
+                                <tr>
+                                    <td>Not Null</td>
+                                    <td>{(schema.required || []).join(', ')}</td>
+                                </tr>
+                                <tr>
+                                    <td>Columns Count</td>
+                                    <td>{Object.entries(schema.properties || {}).length}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div title="DataX / (RDBMS ➔ HDFS)">
+                            <CodeBlock language="json" value={JSON.stringify(convertHiveWriter(schema), null, 3)} />
+                        </div>
+                        <div title="Scoop / (RDBMS ➔ Impala)">
+                            <CodeBlock language="shell" value={'// TODO'} />
+                        </div>
+                        <div title="Impala Table DDL">
+                            <CodeBlock language="shell" value={'// TODO'} />
+                        </div>
+                        <div title="RDBMS Table DQL">
+                            <CodeBlock language="sql" value={createDQL(schema)} />
+                        </div>
+                        <div title="JSON Schema">
+                            <CodeBlock language="json" value={JSON.stringify(schema, null, 3)} />
+                        </div>
+                    </Accordion>
+                ) : (
+                    <div>Error</div>
+                )}
             </Modal>
         </Fragment>
     );
