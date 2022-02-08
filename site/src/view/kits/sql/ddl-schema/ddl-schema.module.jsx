@@ -99,7 +99,7 @@ const createImpalaDDL = ({ title, description, properties = {} }) => {
             columns.join(',\n'),
         ')',
         `partitioned by (dt string comment "日期分区字段")`,
-        `comment '${description}'`,
+        `comment '${description || title}'`,
         `row format delimited fields terminated by '\\t'`,
         `stored as orc`
     ].join('\n');
