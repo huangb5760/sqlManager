@@ -9,7 +9,7 @@
 }
 
 .root .menu .menu_group .menu_item {
-    padding: 0 10px;
+    padding: 0;
     cursor: pointer;
     line-height: 1.4rem;
     list-style-position: inside;
