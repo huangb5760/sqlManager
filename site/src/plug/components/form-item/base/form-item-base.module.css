@@ -1,0 +1,40 @@
+.root {
+	/* 表单 */
+	--form-item-margin: 5px;
+	--form-item-padding-h: 3px;
+	--form-item-padding-v: 0;
+	--form-item-height: 30px;
+	--form-item-border: 1px solid var(--border-color);
+	--form-item-border-radius: 3px;
+	--form-item-bgcolor: white;
+    position: relative;
+    margin: var(--form-item-margin);
+    border: var(--form-item-border);
+    border-radius: var(--form-item-border-radius);
+}
+
+.root.inline {
+    display: inline-block;
+}
+
+.root button, 
+.root select,
+.root input {
+    margin: 0;
+    height: var(--form-item-height);
+    border: none;
+    outline: none;
+    background-color: var(--form-item-bgcolor);
+    line-height: var(--form-item-height);
+}
+
+.root input {
+    padding: var(--form-item-padding-v) var(--form-item-padding-h);
+    width: calc(100% - var(--form-item-padding-h) * 2);
+}
+
+.root button, 
+.root select {
+    padding: 0;
+    width: 100%;
+}

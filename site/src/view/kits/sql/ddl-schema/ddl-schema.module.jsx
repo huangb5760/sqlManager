@@ -4,9 +4,8 @@ import classNames from "classnames";
 import { Parser } from 'sql-ddl-to-json-schema';
 
 import { useDocumentTitle } from 'plug/hooks';
-import { Accordion, CodeBlock, Splitter as SplitView, Select, JSONViewer } from "plug/components";
+import { Accordion, Button, CodeBlock, Label, Splitter, Select, JSONViewer } from "plug/components";
 
-import { Button } from 'plug/extra/form-item/v1/form-item-v1.module';
 import DriftToolbar from 'plug/extra/drift-toolbar/drift-toolbar.module';
 
 import SQLFormatterV1 from 'view/kits/sql/formatter/sql-formatter.module';
@@ -102,7 +101,7 @@ const createImpalaDDL = ({ title, description, properties = {} }) => {
     });
     return [
         `create table if not exists ${tableName} (`,
-        columns.join(',\n'),
+            columns.join(',\n'),
         ')',
         `partitioned by (dt string comment "日期分区字段")`,
         `comment '${description || title}'`,
@@ -124,7 +123,7 @@ export default function DataDefinitionSchema() {
     }, [ddls]);
     const schema = schemas[mode];
     return (
-        <SplitView className={styles.root} sizes={[55, 45]} gutterSize={5}>
+        <Splitter className={styles.root} sizes={[55, 45]} gutterSize={5}>
             <SQLFormatterV1 value={ddls} onChange={setDDLs} />
             <div className={classNames(styles.board)}>
                 {schema ? (
@@ -170,8 +169,8 @@ export default function DataDefinitionSchema() {
                             <JSONViewer title="JSON Schema" value={schema} />
                         </Accordion>
                         <DriftToolbar postion="rb">
-                            <Button>Show schema of</Button>
-                            <Select defaultValue={mode} onChange={value => { setMode(value); }}>
+                            <Label inline>Show schema of</Label>
+                            <Select inline defaultValue={mode} onChange={value => { setMode(value); }}>
                                 {schemas.map((schema, index) => (
                                     <option key={index} value={index}>{schema.title}</option>
                                 ))}
@@ -185,6 +184,6 @@ export default function DataDefinitionSchema() {
                     </Fragment>
                 )}
             </div>
-        </SplitView>
+        </Splitter>
     );
 }
