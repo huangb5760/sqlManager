@@ -1,0 +1,45 @@
+.root {
+    --header-height: 2rem;
+
+    height: 100%;
+}
+
+.root .header {
+    position: relative;
+    height: var(--header-height);
+    border-bottom: 1px solid var(--border-color);
+    user-select: none;
+}
+
+.root .header .name {
+    position: absolute;
+    left: 10px;
+    line-height: var(--header-height);
+}
+
+.root .header .icon::after {
+    --icon-size: 20px;
+    
+    position: absolute;
+    top: calc((var(--header-height) - var(--icon-size)) / 2);
+    right: 10px;
+    display: inline-block;
+    width: var(--icon-size);
+    height: var(--icon-size);
+    line-height: calc(var(--icon-size) - 2px);
+    content: 'x';
+    text-align: center;
+    cursor: pointer;
+}
+
+.root .header:hover .icon::after {
+    background-color: var(--border-color);
+    opacity: 0.6;
+}
+
+.root .content {
+    padding: 10px;
+
+    height: calc(100% - var(--header-height) - 10px * 2 - 1px);
+    overflow: auto;
+}
