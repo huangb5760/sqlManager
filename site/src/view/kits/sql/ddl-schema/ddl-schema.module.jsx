@@ -1,12 +1,10 @@
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import classNames from "classnames";
-
 import { Parser } from 'sql-ddl-to-json-schema';
 
 import { useDocumentTitle } from 'plug/hooks';
-
-import { Accordion, CodeBlock, Splitter as SplitView, Modal, Select, CodeEditor, JSONViewer } from "plug/components";
+import { Accordion, CodeBlock, Splitter as SplitView, Select, CodeEditor, JSONViewer } from "plug/components";
 
 import { Button } from 'plug/extra/form-item/v1/form-item-v1.module';
 import DriftToolbar from 'plug/extra/drift-toolbar/drift-toolbar.module';
@@ -96,7 +94,7 @@ const createImpalaDDL = ({ title, description, properties = {} }) => {
     });
     return [
         `create table if not exists ${tableName} (`,
-        columns.join(',\n'),
+            columns.join(',\n'),
         ')',
         `partitioned by (dt string comment "日期分区字段")`,
         `comment '${description || title}'`,
@@ -109,78 +107,65 @@ export default function DataDefinitionSchema() {
     useDocumentTitle('DDL Schema');
     const [ddls, setDDLs] = useState(DEMO_DDL);
     const [mode, setMode] = useState(0);
-    const [show, setShow] = useState(false);
     const schemas = useMemo(() => {
         return MYSQL_DDL_PARSER.feed(ddls).toJsonSchemaArray(DDL_PARSER_OPTIONS);
     }, [ddls]);
     const schema = schemas[mode];
     return (
-        <Fragment>
-            <SplitView className={styles.root} sizes={[60, 40]} gutterSize={5}>
-                <div className={styles.editor}>
-                    <CodeEditor language="sql" value={ddls} onChange={setDDLs} />
-                </div>
-                <div className={classNames(styles.board)}>
-                    <JSONViewer value={schema} />
-                    <DriftToolbar postion="rb">
-                        <Button onClick={() => setShow(true)}>Show schema of</Button>
-                        <Select defaultValue={mode} onChange={value => { setMode(value); }}>
-                            {schemas.map((schema, index) => (
-                                <option key={index} value={index}>{schema.title}</option>
-                            ))}
-                        </Select>
-                    </DriftToolbar>
-                </div>
-            </SplitView>
-            <Modal className={styles.modal} open={show} title="展示 Schema" onClose={() => setShow(false)}>
-                {schema ? (
-                    <Accordion>
-                        <div className={styles.summary} title={`Table Summary`}>
-                            <table>
-                                <tbody>
+        <SplitView className={styles.root} sizes={[60, 40]} gutterSize={5}>
+            <div className={styles.editor}>
+                <CodeEditor language="sql" value={ddls} onChange={setDDLs} />
+            </div>
+            <div className={classNames(styles.board)}>
+                <Accordion>
+                    <div className={styles.summary} title="Table Summary">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>{schema.title}</td>
+                                </tr>
+                                {schema.description && (
                                     <tr>
-                                        <td>Name</td>
-                                        <td>{schema.title}</td>
+                                        <td>Comment</td>
+                                        <td>{schema.description}</td>
                                     </tr>
-                                    {schema.description && (
-                                        <tr>
-                                            <td>Comment</td>
-                                            <td>{schema.description}</td>
-                                        </tr>
-                                    )}
-                                    {(columns => (
-                                        <tr>
-                                            <td>Columns({columns.length})</td>
-                                            <td>{columns.map(([column]) => column).join(', ')}</td>
-                                        </tr>
-                                    ))(Object.entries(schema.properties || {}))}
-                                    {(items => (
-                                        <tr>
-                                            <td>Required({items.length})</td>
-                                            <td>{items.join(', ')}</td>
-                                        </tr>
-                                    ))(schema.required || [])}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div title="DataX / (RDBMS ➔ HDFS)">
-                            <CodeBlock language="json" value={JSON.stringify(convertHiveWriter(schema), null, 3)} />
-                        </div>
-                        <div title="Impala Table DDL">
-                            <CodeBlock language="sql" value={createImpalaDDL(schema)} />
-                        </div>
-                        <div title="RDBMS Table DQL">
-                            <CodeBlock language="sql" value={createDatabaseDQL(schema)} />
-                        </div>
-                        <div title="JSON Schema">
-                            <CodeBlock language="json" value={JSON.stringify(schema, null, 3)} />
-                        </div>
-                    </Accordion>
-                ) : (
-                    <div>Error</div>
-                )}
-            </Modal>
-        </Fragment>
+                                )}
+                                {(columns => (
+                                    <tr>
+                                        <td>Columns({columns.length})</td>
+                                        <td>{columns.map(([column]) => column).join(', ')}</td>
+                                    </tr>
+                                ))(Object.entries(schema.properties || {}))}
+                                {(items => (
+                                    <tr>
+                                        <td>Required({items.length})</td>
+                                        <td>{items.join(', ')}</td>
+                                    </tr>
+                                ))(schema.required || [])}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div title="DataX / (RDBMS ➔ HDFS)">
+                        <CodeBlock language="json" value={JSON.stringify(convertHiveWriter(schema), null, 3)} />
+                    </div>
+                    <div title="Impala Table DDL">
+                        <CodeBlock language="sql" value={createImpalaDDL(schema)} />
+                    </div>
+                    <div title="RDBMS Table DQL">
+                        <CodeBlock language="sql" value={createDatabaseDQL(schema)} />
+                    </div>
+                    <JSONViewer title="JSON Schema" value={schema} />
+                </Accordion>
+                <DriftToolbar postion="rb">
+                    <Button>Show schema of</Button>
+                    <Select defaultValue={mode} onChange={value => { setMode(value); }}>
+                        {schemas.map((schema, index) => (
+                            <option key={index} value={index}>{schema.title}</option>
+                        ))}
+                    </Select>
+                </DriftToolbar>
+            </div>
+        </SplitView>
     );
-
 }
