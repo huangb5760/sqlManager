@@ -64,7 +64,9 @@ const convertHiveWriter = (schema = {}) => {
                     "name": "hdfswriter",
                     "parameter": {
                         "defaultFS": "${hdfs_service}",
-                        "fileType": "orc",
+                        "fileType": "text",
+                        "writeMode": "nonConflict",
+                        "fieldDelimiter": "\b",
                         "path": "${hdfs_location}/${sync_table}",
                         "fileName": "${sync_table}",
                         "column": Object.entries(schema.properties || {}).map(([column, options], index) => ({
@@ -112,7 +114,7 @@ export default function DataDefinitionSchema() {
     }, [ddls]);
     const schema = schemas[mode];
     return (
-        <SplitView className={styles.root} sizes={[60, 40]} gutterSize={5}>
+        <SplitView className={styles.root} sizes={[55, 45]} gutterSize={5}>
             <div className={styles.editor}>
                 <CodeEditor language="sql" value={ddls} onChange={setDDLs} />
             </div>
