@@ -2,6 +2,8 @@ import React, { Component, Fragment, Suspense } from 'react';
 
 import classNames from 'classnames';
 
+import { CodeBlock } from "plug/components";
+
 import styles from './status.module.css';
 
 export const Loading = ({ type, message, color }) => {
@@ -42,8 +44,8 @@ export class ErrorBoundary extends Component {
         this.state = { hasError: false };
     }
 
-    static getDerivedStateFromError(error) {
-        return { hasError: true, error };
+    static getDerivedStateFromError({ message }) {
+        return { hasError: true, error: message };
     }
 
     componentDidCatch(error, errorInfo) {
@@ -51,22 +53,15 @@ export class ErrorBoundary extends Component {
     }
 
     render() {
-        if (this.state.hasError) {
-            return (
-                <Fragment>
-                    <h3>好像出错了！</h3>
-                    {this.state.error && (
-                        (process.env.NODE_ENV === 'development') ? (
-                            <pre>
-                                <code>{this.state.error.stack}</code>
-                            </pre>
-                        ) : (
-                            <div>{this.state.error.message}</div>
-                        )
-                    )}
-                </Fragment>
-            );
-        }
-        return this.props.children;
+        return this.state.hasError ? (
+            <Fragment>
+                <h3>好像出错了！</h3>
+                {this.state.error && (
+                    <CodeBlock language="shell" value={this.state.error} />
+                )}
+            </Fragment>
+        ) : (
+            this.props.children
+        );
     }
 };

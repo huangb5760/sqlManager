@@ -17,10 +17,8 @@ import { useDocumentTitle, useJSONPath } from 'plug/hooks';
 
 import { Button, TextArea, FileInput } from 'plug/extra/form-item/v1/form-item-v1.module';
 
-import { Splitter as SplitView } from "plug/components";
-
 import DriftToolbar from 'plug/extra/drift-toolbar/drift-toolbar.module';
-import { CodeBlock, CodeEditor, JSONViewer } from 'plug/components';
+import { CodeBlock, CodeEditor, JSONViewer, Splitter as SplitView } from 'plug/components';
 
 import styles from './json-kits-v1.module.css';
 
@@ -42,7 +40,7 @@ const NOT_JSON_VALUE_KEY = '__not_a_json_value';
 
 const SUPPORTED_VIEWER_TYPES = ['array', 'object'];
 
-const JSONEditor = () => {
+export const JSONEditor = () => {
     useDocumentTitle('JSON 编辑器');
     const { source, setSource } = useContext(JSONKitsContext);
     const parsed = useMemo(() => {

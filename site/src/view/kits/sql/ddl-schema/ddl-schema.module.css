@@ -3,6 +3,7 @@
 }
 
 .board {
+    position: relative;
     padding: 10px;
     height: calc(100% - 10px * 2);
     overflow-y: auto;

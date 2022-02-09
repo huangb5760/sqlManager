@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Outlet, useOutletContext } from "react-router-dom";
 
 import { useDocumentTitle } from 'plug/hooks';
