@@ -1,10 +1,9 @@
 
 import { useDocumentTitle } from 'plug/hooks';
 
-import { Splitter, Tree } from "plug/components";
+import { Accordion, Splitter, Tree } from "plug/components";
 
 import styles from './kits.module.css';
-
 
 const items = [{ 
     id: 'sql', 
@@ -22,9 +21,10 @@ export default function Kits() {
     return (
         <div className={styles.root}>
             <Splitter sizes={[15, 85]} gutterSize={2} minSize={230}>
-                <div>
-                    <Tree data={items} />
-                </div>
+                <Accordion type="menu">
+                    <div title="JSON">hello</div>
+                    <div title="SQL">world</div>
+                </Accordion>
                 <div>2</div>
             </Splitter>
         </div>

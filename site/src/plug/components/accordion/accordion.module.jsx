@@ -4,10 +4,10 @@ import classNames from 'classnames';
 
 import styles from './accordion.module.css';
 
-export default function Accordion({ children, show}) {
-    const [ current, setCurrent ] = useState(show || 0);
+export default function Accordion({ children, show, type = "component" }) {
+    const [current, setCurrent] = useState(show || 0);
     return (
-        <div className={styles.root}>
+        <div className={styles.root} data-type={type}>
             {Children.map(children, (child, index) => (
                 <div key={index} className={classNames(styles.item, { [styles.expanded]: (current === index) })}>
                     <div className={styles.header} onClick={() => { setCurrent(index) }}>
