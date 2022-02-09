@@ -96,7 +96,7 @@ const createImpalaDDL = ({ title, description, properties = {} }) => {
     });
     return [
         `create table if not exists ${tableName} (`,
-            columns.join(',\n'),
+        columns.join(',\n'),
         ')',
         `partitioned by (dt string comment "日期分区字段")`,
         `comment '${description || title}'`,
@@ -116,12 +116,12 @@ export default function DataDefinitionSchema() {
     const schema = schemas[mode];
     return (
         <Fragment>
-            <SplitView sizes={[60, 40]} gutterSize={5}>
+            <SplitView className={styles.root} sizes={[60, 40]} gutterSize={5}>
                 <div className={styles.editor}>
                     <CodeEditor language="sql" value={ddls} onChange={setDDLs} />
                 </div>
                 <div className={classNames(styles.board)}>
-                    <JSONViewer name="DDL" value={schema} />
+                    <JSONViewer value={schema} />
                     <DriftToolbar postion="rb">
                         <Button onClick={() => setShow(true)}>Show schema of</Button>
                         <Select defaultValue={mode} onChange={value => { setMode(value); }}>
@@ -132,31 +132,35 @@ export default function DataDefinitionSchema() {
                     </DriftToolbar>
                 </div>
             </SplitView>
-            <Modal className={styles.details} open={show} title="展示 Schema" onClose={() => setShow(false)}>
+            <Modal className={styles.modal} open={show} title="展示 Schema" onClose={() => setShow(false)}>
                 {schema ? (
                     <Accordion>
                         <div className={styles.summary} title={`Table Summary`}>
                             <table>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>{schema.title}</td>
-                                </tr>
-                                <tr>
-                                    <td>Comment</td>
-                                    <td>{schema.description}</td>
-                                </tr>
-                                <tr>
-                                    <td>Columns</td>
-                                    <td>{Object.entries(schema.properties || {}).map(([column]) => column).join(', ')}</td>
-                                </tr>
-                                <tr>
-                                    <td>Not Null</td>
-                                    <td>{(schema.required || []).join(', ')}</td>
-                                </tr>
-                                <tr>
-                                    <td>Columns Count</td>
-                                    <td>{Object.entries(schema.properties || {}).length}</td>
-                                </tr>
+                                <tbody>
+                                    <tr>
+                                        <td>Name</td>
+                                        <td>{schema.title}</td>
+                                    </tr>
+                                    {schema.description && (
+                                        <tr>
+                                            <td>Comment</td>
+                                            <td>{schema.description}</td>
+                                        </tr>
+                                    )}
+                                    {(columns => (
+                                        <tr>
+                                            <td>Columns({columns.length})</td>
+                                            <td>{columns.map(([column]) => column).join(', ')}</td>
+                                        </tr>
+                                    ))(Object.entries(schema.properties || {}))}
+                                    {(items => (
+                                        <tr>
+                                            <td>Required({items.length})</td>
+                                            <td>{items.join(', ')}</td>
+                                        </tr>
+                                    ))(schema.required || [])}
+                                </tbody>
                             </table>
                         </div>
                         <div title="DataX / (RDBMS ➔ HDFS)">
