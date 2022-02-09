@@ -1,0 +1,24 @@
+.root .left {
+    position: relative;
+    margin: 1px 0;
+}
+
+.root .right {
+    --bar-height: 40px;
+
+    height: 100%;
+}
+
+.root .right .query_bar {
+    
+    padding: 5px;
+    height: var(--bar-height);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.root .right .parsed {
+    padding: 5px;
+    overflow-y: auto;
+    height: calc(100% - 5px * 4 - var(--bar-height) - 1px);
+}
+

@@ -1,0 +1,13 @@
+.root {
+	/* 表单 */
+	--form-item-margin: 5px;
+	--form-item-padding: 0 3px;
+	--form-item-height: 30px;
+	--form-item-border: 1px solid var(--border-color);
+	--form-item-border-radius: 3px;
+	--form-item-bgcolor: white;
+
+    margin: var(--form-item-margin);
+    border: var(--form-item-border);
+    border-radius: var(--form-item-border-radius);
+}

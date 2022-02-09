@@ -1,5 +1,12 @@
-.root {
+.root.inline {
+    display: inline-block;
+}
+
+.root select {
     margin: 0;
-    padding: 0;
-    height: 30px;
+    padding: var(--form-item-padding);
+    height: var(--form-item-height);
+    background-color: var(--form-item-bgcolor);
+    border: none;
+    outline: none;
 }

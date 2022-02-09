@@ -1,29 +1,33 @@
-.root {
-    --bg-color: #fff;
-    margin: 15px 0;
+.root.wrap {
+    padding: 5px 5px 10px;
 }
 
 .root.inline {
     display: inline-block;
-
-    margin-right: 5px;
 }
 
-.root .container {
+.root.wrap .container {
     position: relative;
-    display: inline-block;
     padding: 10px;
-    border: 1px solid var(--border-color);
 }
 
-.root .container .label {
+.root.wrap .container .label {
     position: absolute;
-    top: -15px;
+    top: -10px;
     display: none; 
-    background-color: var(--bg-color);
+    font-size: 0.8rem;
+    background-color: var(--form-item-bgcolor);
 }
 
-.root .container.focused .label {
+.root.wrap .container.focused .label {
     display: inherit;
     padding: 0 5px;
+}
+
+.root .container input {
+    margin: 0;
+    padding: var(--form-item-padding);
+    height: var(--form-item-height);
+    border: none;
+    outline: none;
 }
