@@ -9,6 +9,8 @@ import JSONEditor from 'view/kits/json/editor/json-editor.module';
 import SQLFormatterV1 from 'view/kits/sql/formatter/sql-formatter.module';
 import DataDefinitionSchema from 'view/kits/sql/ddl-schema/ddl-schema.module';
 
+import TimeKits from 'view/kits/text/time/time-kits.module';
+
 import styles from './kits.module.css';
 
 const groups = [{
@@ -25,6 +27,12 @@ const groups = [{
     }, {
         name: 'MySQL DDL Schema',
         view: <DataDefinitionSchema />
+    }]
+}, {
+    name: 'Extra',
+    items: [{
+        name: '时间工具类',
+        view: <TimeKits />
     }]
 }];
 

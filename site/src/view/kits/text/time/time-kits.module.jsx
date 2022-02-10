@@ -1,10 +1,10 @@
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import dayjs from 'dayjs';
 import kindOf from 'kind-of';
 
 import classNames from 'classnames';
 
-import { FormInput, Select } from 'plug/components';
+import { Accordion, FormInput, Label, Select } from 'plug/components';
 
 import styles from './time-kits.module.css';
 
@@ -98,34 +98,34 @@ export default function TimeKits() {
                 </div>
             </div>
             <div>
-                <fieldset>
-                    <legend>
-                        <span>Patterns of </span>
-                        <Select>
+                <Accordion>
+                    <div title="Pattern">
+                        {GROUPS.map(([groupLabel, groupName], index) => (
+                            <fieldset key={index}>
+                                <legend>{groupLabel}</legend>
+                                {PATTERNS[groupName].map(({ label, value }, index) => (
+                                    <FormInput key={index} inline name={label} value={kindOf(value) === 'string' ? value : value[pattern]} />
+                                ))}
+                            </fieldset>
+                        ))}
+                    </div>
+                    <div title="Calculate">
+                        {GROUPS.map(([groupLabel, groupName]) => (
+                            PATTERNS[groupName].filter(({ value }) => kindOf(value) === 'object').map(({ label, value }, index) => (
+                                <div key={index}>
+                                    <FormInput inline name={label} value={value} data-group={groupLabel} />
+                                    <FormInput inline type="number" name={`Add x ${label.toLowerCase()}`} value={0} data-group={groupLabel} />
+                                </div>
+                            ))
+                        ))}
+                    </div>
+                    <div title="Presets">
+                        <Select inline>
                             <option value="Java">Java</option>
                             <option value="MySQL">MySQL</option>
                         </Select>
-                    </legend>
-                    {GROUPS.map(([groupLabel, groupName], index) => (
-                        <fieldset key={index}>
-                            <legend>{groupLabel}</legend>
-                            {PATTERNS[groupName].map(({ label, value }, index) => (
-                                <FormInput key={index} inline name={label} value={kindOf(value) === 'string' ? value : value[pattern]} />
-                            ))}
-                        </fieldset>
-                    ))}
-                </fieldset>
-                <fieldset>
-                    <legend>Calculate</legend>
-                    {GROUPS.map(([groupLabel, groupName]) => (
-                        PATTERNS[groupName].filter(({ value }) => kindOf(value) === 'object').map(({ label, value }, index) => (
-                            <div key={index}>
-                                <FormInput inline name={label} value={value} data-group={groupLabel} />
-                                <FormInput inline type="number" name={`Add x ${label.toLowerCase()}`} value={0} data-group={groupLabel} />
-                            </div>
-                        ))
-                    ))}
-                </fieldset>
+                    </div>
+                </Accordion>
             </div>
         </div>
     );
