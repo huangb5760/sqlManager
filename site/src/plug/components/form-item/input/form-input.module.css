@@ -1,0 +1,4 @@
+.root input {
+    padding: var(--form-item-padding-v) var(--form-item-padding-h);
+    width: calc(100% - var(--form-item-padding-h) * 2);
+}

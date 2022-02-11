@@ -1,3 +1,11 @@
+.root {
+    width: 100px;
+}
+
+.root:hover {
+    opacity: 0.6;
+}
+
 .root button {
     padding: 0 5px;
     width: 100%;

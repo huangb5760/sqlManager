@@ -1,10 +1,11 @@
 .root {
 	/* 表单 */
 	--form-item-margin: 5px;
-	--form-item-padding-h: 3px;
+	--form-item-padding-h: 0;
 	--form-item-padding-v: 0;
 	--form-item-height: 30px;
-	--form-item-border: 1px solid var(--border-color);
+    --form-item-border-size: 1px;
+	--form-item-border: var(--form-item-border-size) solid var(--border-color);
 	--form-item-border-radius: 3px;
 	--form-item-bgcolor: white;
     position: relative;
@@ -20,17 +21,18 @@
 .root button, 
 .root select,
 .root input {
-    margin: 0;
     height: var(--form-item-height);
-    border: none;
-    outline: none;
-    background-color: var(--form-item-bgcolor);
     line-height: var(--form-item-height);
 }
 
-.root input {
-    padding: var(--form-item-padding-v) var(--form-item-padding-h);
-    width: calc(100% - var(--form-item-padding-h) * 2);
+.root button, 
+.root select,
+.root input,
+.root textarea {
+    margin: 0;
+    border: none;
+    outline: none;
+    background-color: var(--form-item-bgcolor);
 }
 
 .root button, 

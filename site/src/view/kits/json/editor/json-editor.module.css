@@ -4,16 +4,27 @@
 }
 
 .root .right {
-    --bar-height: 40px;
+    --bar-height: 80px;
 
     height: 100%;
 }
 
 .root .right .query_bar {
-    
+    --opeartion-bar: 130px;
+
+    display: flex;
     padding: 5px;
-    height: var(--bar-height);
+    height: calc(var(--bar-height));
     border-bottom: 1px solid var(--border-color);
+}
+
+.root .right .query_bar .input {
+    width: calc(100% - var(--opeartion-bar) - 5px);
+    height: calc(100% - 5px * 2);
+}
+
+.root .right .query_bar .opeartion {
+    width: var(--opeartion-bar);
 }
 
 .root .right .parsed {

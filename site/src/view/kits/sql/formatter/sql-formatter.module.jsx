@@ -33,7 +33,6 @@ export default function SQLFormatter({ value, onChange = () => null }) {
                 <Button inline onClick={format}>Beautify</Button>
                 <Label inline>Convert keywords to</Label>
                 <Select inline defaultValue={wordCase} onChange={setWordCase}>
-                    <option value="null">Preserve</option>
                     <option value="lower">LowerCase</option>
                     <option value="upper">UpperCase</option>
                 </Select>

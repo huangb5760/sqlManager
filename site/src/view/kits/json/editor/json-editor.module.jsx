@@ -2,23 +2,35 @@ import { Fragment, useMemo, useRef, useState } from "react";
 
 import kindOf from 'kind-of';
 import classNames from "classnames";
-import doCopy from 'copy-to-clipboard';
 
 import unsafeParseJSON from 'parse-json';
 import stripJSONComments from 'strip-json-comments';
 
-import toast from 'react-hot-toast';
-
 import { useDocumentTitle } from 'plug/hooks';
 
-import { CodeBlock, CodeEditor, FormInput, JSONViewer, Select, Splitter } from 'plug/components';
+import { Button, CodeBlock, CodeEditor, JSONViewer, Select, Splitter, TextArea } from 'plug/components';
 
 import styles from './json-editor.module.css';
+
+const QL_TYPES = {
+    jsonpath: {
+        display: 'JSONPath',
+        language: '$',
+        descrption: '使用 JSONPath 查询数据'
+    },
+    mingo: {
+        display: 'MongoQuery',
+        language: '{}',
+        descrption: ''
+    },
+};
 
 export default function JSONEditor() {
     useDocumentTitle('JSON 编辑器');
     const editorInstance = useRef();
     const [source, setSource] = useState('{}');
+    const [type, setType] = useState('{}');
+    const [expression, setExpression] = useState('');
     const parsed = useMemo(() => {
         try {
             const value = unsafeParseJSON(stripJSONComments(source));
@@ -42,13 +54,20 @@ export default function JSONEditor() {
                 ) : (
                     <Fragment>
                         <div className={styles.query_bar}>
-                            <Select inline>
-                                <option value="jsonpath">JSONPath</option>
-                                <option value="mingo">MongoQuery</option>
-                            </Select>
-                            <FormInput inline pure />
+                            <div className={styles.input}>
+                                <TextArea placeholder={``} onChange={setExpression} />
+                            </div>
+                            <div className={styles.opeartion}>
+                                <Select onChange={value => console.log(value)}>
+                                    {Object.entries(QL_TYPES).map(([key, option], index) => (
+                                        <option key={index} value={key}>{option.display}</option>
+                                    ))}
+                                </Select>
+                                <Button>查询</Button>
+                            </div>
+
                         </div>
-                        <JSONViewer className={styles.parsed} name="JSON" value={parsed} />
+                        <JSONViewer className={styles.parsed} name="Result" value={parsed} />
                     </Fragment>
                 )}
             </div>

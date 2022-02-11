@@ -11,11 +11,9 @@ import styles from './form-input.module.css';
 
 const FormInput = memo(({ className, type = 'text', name: fieldName, defaultValue, value: initValue, required, inline, pure, onChange }) => {
     const fieldId = `form-item-${useId()}`;
-    const [focused, sedFocused] = useState(true); // TODO 用于仿照 MUI 的效果
     const name = fieldName || `${pascalCase(type)} Field`;
     return (
-        <FormItem className={classNames(styles.root, className, { [styles.focused]: focused })} inline={inline} pure={pure}>
-            {/* onFocus={() => sedFocused(true)} onBlur={() => sedFocused(((defaultValue || initValue) !== undefined) || false)} */}
+        <FormItem className={classNames(styles.root, className)} inline={inline} pure={pure}>
             <input id={fieldId} defaultValue={defaultValue || initValue} type={type} placeholder={name} />
         </FormItem>
     );
