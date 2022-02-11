@@ -1,0 +1,13 @@
+.root {
+    --content-padding: 5px;
+    padding: var(--content-padding);
+    height: calc(100% - var(--content-padding) * 2 - var(--form-item-border-size) * 2);
+    overflow: auto;
+}
+
+.root textarea {
+    width: calc(100% - var(--form-item-border-size) * 4);
+    height: calc(100% - var(--form-item-border-size) * 4);
+
+    resize: none;
+}
