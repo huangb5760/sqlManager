@@ -1,8 +1,6 @@
 .root {
 	/* 表单 */
 	--form-item-margin: 5px;
-	--form-item-padding-h: 0;
-	--form-item-padding-v: 0;
 	--form-item-height: 30px;
     --form-item-border-size: 1px;
 	--form-item-border: var(--form-item-border-size) solid var(--border-color);

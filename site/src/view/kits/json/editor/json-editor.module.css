@@ -1,6 +1,10 @@
+.root {
+    height: 100%;
+}
+
 .root .left {
-    position: relative;
     margin: 1px 0;
+    height: calc(100% - 1px * 2);
 }
 
 .root .right {

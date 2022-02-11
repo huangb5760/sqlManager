@@ -21,7 +21,7 @@ const formatSQLV1 = (sql, reservedWordCase) => {
 export default function SQLFormatter({ value, onChange = () => null }) {
     useDocumentTitle('SQL 格式化');
     const [sql, setSQL] = useState(value || 'select 1 from dual');
-    const [wordCase, setWordCase] = useState('null');
+    const [wordCase, setWordCase] = useState('lower');
     const format = () => {
         setSQL(formatSQLV1(sql, wordCase));
         typeof (onChange) && onChange(sql);

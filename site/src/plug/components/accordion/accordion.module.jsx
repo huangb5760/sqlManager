@@ -1,4 +1,4 @@
-import { Children, useState } from "react";
+import { Children, Fragment, useState } from "react";
 
 import classNames from 'classnames';
 
@@ -11,9 +11,9 @@ export default function Accordion({ className, children, show, type = "component
             {Children.map(children, (child, index) => (
                 <div key={index} className={classNames(styles.item, { [styles.expanded]: (current === index) })}>
                     <div className={styles.header} data-no={index + 1} onClick={() => { setCurrent(index) }}>
-                        <span>{child.props.title || `Accordion ${index + 1}`}</span>
+                        <Fragment>{child.props.title || `Accordion ${index + 1}`}</Fragment>
                     </div>
-                    <div className={styles.content_wrapper}>
+                    <div className={styles.content}>
                         <div className={styles.details}>
                             {child}
                         </div>

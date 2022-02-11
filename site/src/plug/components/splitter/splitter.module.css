@@ -10,3 +10,7 @@
 .root :global(.gutter) {
     background-color: var(--border-color);
 }
+
+.root .item {
+    overflow: auto;
+}

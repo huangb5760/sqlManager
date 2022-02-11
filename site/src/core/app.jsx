@@ -12,7 +12,8 @@ import DriftLayout from "plug/layout/drift-layout/drift-layout.module";
 import Home from 'view/home/home.module';
 import Blog from 'view/blog/blog.module';
 import Post from 'view/post/post.module';
-import Kits from 'view/kits/v1/kits.module';
+
+import Kits from 'view/kits/home/kits-home.module';
 
 import SchemaViewer from 'view/page/schema/schema-page.module';
 
@@ -50,10 +51,7 @@ const RouteViews = () => useRoutes([{
 }, {
     path: '/kits/v2',
     element: <NaviLayout />,
-    children: [ {
-        index: true,
-        element: <Kits />,
-    } ]
+    children: [Kits]
 }, {
     path: '/schema',
     element: <DriftLayout />,

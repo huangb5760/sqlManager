@@ -1,4 +1,6 @@
 .root input {
-    padding: var(--form-item-padding-v) var(--form-item-padding-h);
-    width: calc(100% - var(--form-item-padding-h) * 2);
+    --content-intent: 5px;
+
+    padding: 0 var(--content-intent);
+    width: calc(100% - var(--content-intent) * 2);
 }

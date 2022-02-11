@@ -46,7 +46,7 @@ export default function JSONEditor() {
     return (
         <Splitter className={styles.root} sizes={[55, 45]} minSize={[600, 400]}>
             <div className={styles.left}>
-                <CodeEditor className={styles.editor} language="json" ref={editorInstance} value={source} onChange={setSource} />
+                <CodeEditor language="json" ref={editorInstance} value={source} onChange={setSource} />
             </div>
             <div className={classNames(styles.right)}>
                 {(kindOf(parsed) === 'error') ? (
