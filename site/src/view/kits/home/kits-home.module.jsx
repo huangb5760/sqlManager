@@ -50,26 +50,19 @@ const ROUTER = {
             element: <DDLSchema />
         }]
     }, {
-        path: 'expr',
-        label: '表达式',
-        children: [{
-            index: true,
-            element: <div>表达式工具</div>
-        }, {
-            path: 'corn',
-            label: 'Cron 表达式',
-            element: <CronExpression />
-        }, {
-            path: 'scoop',
-            label: 'Scoop 命令行',
-            element: <ScoopCommander />
-        }]
-    }, {
         label: 'Extra',
         children: [{
             path: 'time',
             label: '时间工具类',
             element: <TimeKits />
+        }, {
+            path: 'expr/corn',
+            label: 'Cron 表达式',
+            element: <CronExpression />
+        }, {
+            path: 'expr/scoop',
+            label: 'Scoop 命令行',
+            element: <ScoopCommander />
         }]
     }]
 };

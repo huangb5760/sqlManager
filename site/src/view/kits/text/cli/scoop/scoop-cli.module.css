@@ -1,0 +1,15 @@
+.root {
+    margin: 5px;
+}
+
+.root .rule {
+    width: 200px;
+}
+
+.root .board {
+    display: flex;
+}
+
+.root .board .endpoint {
+    flex: 1;
+}

@@ -49,6 +49,10 @@ fieldset {
 	border: 1px solid var(--border-color);
 }
 
+fieldset legend {
+	padding: 0 5px;
+}
+
 ul, ol {
 	padding-inline-start: 17px;
 }

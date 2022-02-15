@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useLayoutEffect, useMemo } from 'react';
 
 import kindOf from 'kind-of';
 import { nanoid } from 'nanoid';
@@ -23,8 +23,6 @@ export const useJSONPath = (data = {}, path) => {
     return JSONPath({ path: jp, json: data, wrap: false });
 };
 
-
-
 /**
  * 读取站点元数据
  * 
@@ -47,7 +45,7 @@ export const useMetaInfo = (key) => {
  * @param {*} title 
  */
 export const useDocumentTitle = (title) => {
-    useEffect(() => {
+    useLayoutEffect(() => {
         document.title = (title ? (title.trim() + ' - ') : '') + process.env.REACT_APP_TITLE;
         return () => {
             document.title = process.env.REACT_APP_TITLE;
