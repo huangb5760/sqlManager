@@ -94,10 +94,10 @@ export default function TimeKits() {
         <div className={classNames(styles.root)}>
             <div>
                 <div>
-                    <FormInput name="DateTime" required value={datetime.format('YYYY-MM-DD')} type="datetime" onChange={value => setDatetime(dayjs(value))} />
+                    <FormInput name="DateTime" required value={datetime.format('YYYY-MM-DD')} onChange={value => setDatetime(dayjs(value))} />
                 </div>
                 <div>
-                    <FormInput name="Unix Timestamp" value={datetime.unix()} type="datetime" />
+                    <FormInput name="Unix Timestamp" value={datetime.unix()} />
                 </div>
             </div>
             <Accordion>

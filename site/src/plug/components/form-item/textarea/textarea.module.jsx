@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import kindOf from 'kind-of';
 
 import FormItem from '../base/form-item-base.module';
 
@@ -7,7 +6,7 @@ import styles from './textarea.module.css';
 
 export default function TextArea({ className, inline, onChange }) {
     const valueChanged = (value) => {
-        if (kindOf(onChange) === 'function') {
+        if (typeof onChange === 'function') {
             onChange(value);
         }
     };
