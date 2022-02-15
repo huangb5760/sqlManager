@@ -140,7 +140,7 @@ export default function ScoopCLI() {
                     <span>选项：</span>
                     <Select inline className={styles.rule} onChange={selected => setRule(selected.split(','))}>
                         {ACTIONS.map((action, index) => (
-                            <optgroup key={index} label="Import">
+                            <optgroup key={index} label={action}>
                                 {RULES.map((item, ri) => (
                                     <option key={ri} value={[action, ...item]}>{item.join(' -> ')}</option>
                                 ))}
