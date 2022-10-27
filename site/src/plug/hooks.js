@@ -5,7 +5,7 @@ import { nanoid } from 'nanoid';
 
 import { JSONPath } from 'jsonpath-plus-browser';
 
-import APP_JSON from 'data/cache/app.json';
+import APP_JSON from 'data/json/app.json';
 
 export const useId = () => useMemo(() => nanoid(), []);
 
